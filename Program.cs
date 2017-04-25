@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 /// <summary>
-/// orp 2015.10.28
+/// orp 2015.10.28 
 /// </summary>
 namespace MonitorCpuTool
 {
