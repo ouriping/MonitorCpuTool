@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
-using System.Timers; 
+using System.Timers;
 
 /// <summary>
 /// 欧日平 2014.10.28
@@ -21,22 +21,22 @@ namespace MonitorCpuTool
         {
             InitializeComponent();
             button4_Click(null, null);
-        } 
+        }
         //delegate void delAppendTxt(string str);
         public void AppendText(string str)
         {
-                if (!textBox1.InvokeRequired)
-                {
-                    textBox1.AppendText(str);
-                    textBox1.AppendText("\n");
-                    Utils.Log.WriteLog(str);//写入日志 
-                }
-                else
-                {
-                    Action<string> tempAction = new Action<string>((a) => AppendText(a));
-                    textBox1.Invoke(tempAction, new object[] { str }); 
-                } 
-        } 
+            if (!textBox1.InvokeRequired)
+            {
+                textBox1.AppendText(str);
+                textBox1.AppendText("\n");
+                Utils.Log.WriteLog(str);//写入日志 
+            }
+            else
+            {
+                Action<string> tempAction = new Action<string>((a) => AppendText(a));
+                textBox1.Invoke(tempAction, new object[] { str });
+            }
+        }
         private void button4_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
@@ -55,7 +55,7 @@ namespace MonitorCpuTool
             }
 
         }
-        System.Timers.Timer t = new System.Timers.Timer(); 
+        System.Timers.Timer t = new System.Timers.Timer();
         /// <summary>
         /// 开始监听CPU
         /// </summary>
@@ -92,15 +92,15 @@ namespace MonitorCpuTool
         /// <summary>
         /// 
         /// </summary>
-       private void Monitor()
-       {
-           for (int i = 0; i < listBox2.Items.Count; i++)
-           {
-               if (listBox2.Items.Count > i)
-               {
-                   Monitor(listBox2.Items[i].ToString());
-               }
-           }
+        private void Monitor()
+        {
+            for (int i = 0; i < listBox2.Items.Count; i++)
+            {
+                if (listBox2.Items.Count > i)
+                {
+                    Monitor(listBox2.Items[i].ToString());
+                }
+            }
         }
         /// <summary>
         /// 进程名,,该名不包含exe后缀
@@ -142,21 +142,21 @@ namespace MonitorCpuTool
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            if (System.IO.Directory.Exists(Utils.Log.directionPath))
+            if (System.IO.Directory.Exists(Utils.Log.DirectionPath))
             {
-                System.Diagnostics.Process.Start(Utils.Log.directionPath);
+                System.Diagnostics.Process.Start(Utils.Log.DirectionPath);
             }
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.SelectedPath = Utils.Log.directionPath == "" ? AppDomain.CurrentDomain.BaseDirectory : Utils.Log.directionPath;
+            fbd.SelectedPath = Utils.Log.DirectionPath == "" ? AppDomain.CurrentDomain.BaseDirectory : Utils.Log.DirectionPath;
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 if (System.IO.Directory.Exists(fbd.SelectedPath))
                 {
-                    Utils.Log.directionPath = fbd.SelectedPath;
+                    Utils.Log.DirectionPath = fbd.SelectedPath + "\\";
                 }
                 else
                 {
@@ -174,6 +174,6 @@ namespace MonitorCpuTool
             this.Close();
         }
 
-         
+
     }
 }

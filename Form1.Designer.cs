@@ -172,7 +172,6 @@
             this.button6.TabIndex = 11;
             this.button6.Text = "设置日志文件夹";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Visible = false;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // frmMain

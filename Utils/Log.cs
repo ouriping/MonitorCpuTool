@@ -3,49 +3,125 @@ using System.IO;
 //using SocketNet;
 namespace Utils
 {
+
+    public class LogInfoPath
+    {
+        public static long MaxFileLength = 1024 * 1024 * 1;
+
+        public static string _directionPath = AppDomain.CurrentDomain.BaseDirectory;//默认路径
+        private static string _logPath = string.Empty;
+
+        //public static string GetLogPath()
+        //{
+        //    if (string.IsNullOrEmpty(_logPath))
+        //    {
+        //        _logPath = (_directionPath == "" ? AppDomain.CurrentDomain.BaseDirectory : _directionPath);
+        //            }
+        //}
+
+        public static string LogPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_logPath))
+                {
+                    _logPath = _directionPath + "CpuLog/Log_" + System.DateTime.Now.ToString("yyyy-MM-dd_hhmmss") + ".txt";
+                    //_directionPath = Path.GetDirectoryName(_logPath);
+                }
+                else
+                {
+                    FileInfo fInfo = new FileInfo(_logPath);
+                    if (fInfo.Exists)
+                    {
+                        if (fInfo.Length > MaxFileLength)
+                        {
+                            _logPath = string.Empty;
+                            _logPath = LogPath;
+                            // LogPath = string.Empty;//注意是LogPath
+                        }
+                    }
+                    else
+                    {
+                        _logPath = string.Empty;
+                    }
+                }
+                if (!Directory.Exists(_directionPath))
+                {
+                    Directory.CreateDirectory(_directionPath);
+                }
+
+                return _logPath;
+            }
+            set
+            {
+                _logPath = value;
+            }
+        }
+    }
+
     /// <summary>
     /// 日志处理对象,包含对日志的相关处理过程
     /// </summary>
     public class Log
     {
+        public static string _directionPath = AppDomain.CurrentDomain.BaseDirectory;
         /// <summary>
         /// 日志目录 最后以/号结尾
         /// </summary>
-        public static string directionPath = string.Empty;
-        private static string logPath = string.Empty;
+        public static string DirectionPath
+        {
+            get
+            {
+                return _directionPath;// string.Empty;
+            }
+            set
+            {
+                _directionPath = value;
+                _logPath = string.Empty;
+            }
+        }
+        private static string _logPath = string.Empty;
         public static string LogPath
         {
             get
             {
-                if (string.IsNullOrEmpty(logPath))
+                if (string.IsNullOrEmpty(_logPath))
                 {
-                    logPath = (directionPath == "" ? AppDomain.CurrentDomain.BaseDirectory : directionPath) + "CpuLog/Log_" + System.DateTime.Now.ToString("yyyy-MM-dd_hhmmss") + ".txt";
-                    directionPath = Path.GetDirectoryName(logPath);
+                    _logPath = DirectionPath + "CpuLog\\Log_" + System.DateTime.Now.ToString("yyyy-MM-dd_hhmmss") + ".txt";
+                    //_directionPath = Path.GetDirectoryName(_logPath);
                 }
                 else
                 {
-                    FileInfo fInfo = new FileInfo(logPath);
+                    FileInfo fInfo = new FileInfo(_logPath);
                     if (fInfo.Exists)
                     {
-                        if (fInfo.Length / 1024 / 1024 > 1)
+                        if (fInfo.Length > (1024 * 1024))
                         {
-                            logPath = string.Empty;
-                            logPath = LogPath;
+                            _logPath = string.Empty;
+                            _logPath = LogPath;
                             // LogPath = string.Empty;//注意是LogPath
                         }
                     }
+                    else
+                    {//找不到文件
+                        string direPath = Path.GetDirectoryName(_logPath);
+                        if (!Directory.Exists(direPath))
+                        {
+                            Directory.CreateDirectory(direPath);
+                        }
+                    }
                 }
-                if (!Directory.Exists(directionPath))
-                {
-                    Directory.CreateDirectory(directionPath);
-                }
+                //if (!Directory.Exists(_directionPath))
+                //{
+                //    Directory.CreateDirectory(_directionPath);
+                //}
 
-                return logPath;
+                return _logPath;
             }
-            set
-            {
-                logPath = value;
-            }
+            //set
+            //{
+            //    _logPath = value;
+            //}
         }
 
         /// <summary>
@@ -61,9 +137,9 @@ namespace Utils
                 sw.Flush();
                 sw.Close();
             }
-            catch
+            catch (Exception ex)
             {
-                // throw new Exception("写入日志错误");
+                throw new Exception("写入日志错误!" + ex.Message);
             }
 
         }
